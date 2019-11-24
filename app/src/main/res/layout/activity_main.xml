@@ -7,6 +7,46 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/logo2"/>
+    </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/idtoolbar_division"
+        android:background="@color/colorDivision"
+        android:layout_width="match_parent"
+        android:layout_below="@id/my_toolbar"
+        android:layout_height="1dp"/>
+    <FrameLayout
+        android:id="@+id/maincontent"
+        android:layout_below="@id/idtoolbar_division"
+        android:layout_above="@id/nav_division"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/nav_division"
+        android:background="@color/colorDivision"
+        android:layout_above="@id/button_navigation"
+        android:layout_width="match_parent"
+        android:layout_below="@id/my_toolbar"
+        android:layout_height="1dp"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/button_navigation"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        app:menu="@menu/button_navigation_main"
+        android:layout_height="wrap_content"/>
+
 
 </RelativeLayout>
