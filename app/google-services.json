@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "2328117689",
+    "firebase_url": "https://instagrotlin.firebaseio.com",
+    "project_id": "instagrotlin",
+    "storage_bucket": "instagrotlin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2328117689:android:840c5a8f4850129631f668",
+        "android_client_info": {
+          "package_name": "com.darax.instagrotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "2328117689-sme2qi6gflgn51m0slj6ess8eeih25ic.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.darax.instagrotlin",
+            "certificate_hash": "66ef20c97be608f2bf4c16d30eb6e64811f113eb"
+          }
+        },
+        {
+          "client_id": "2328117689-8vkr5rgu73d7rnmq7qerfm8trb1h50ug.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDou8LugPCZx5xX7ALHzB-ttekgEMmGYrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "2328117689-8vkr5rgu73d7rnmq7qerfm8trb1h50ug.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
