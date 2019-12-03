@@ -55,5 +55,8 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         //permiso dentro del fragment
         //leer datos del almacenamiento
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),1)
+
+        //Pantalla principal
+        bottom_navigation.selectedItemId =R.id.action_home
     }
 }
