@@ -1,5 +1,6 @@
 package com.darax.instagrotlin.navigation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +24,7 @@ class DetailViewFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view=LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container,false)
+        val view=LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container,false)
         firestore= FirebaseFirestore.getInstance()
         uid =FirebaseAuth.getInstance().currentUser?.uid
         view.detailviewfragmen_reciclerview.adapter= DetailViewReciclerView()
@@ -31,14 +32,14 @@ class DetailViewFragment: Fragment(){
         return view
     }
     inner class DetailViewReciclerView: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
-        var contentUidList: ArrayList<String> = arrayListOf()
+        private var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
+        private var contentUidList: ArrayList<String> = arrayListOf()
         init {
-            firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, _ ->
                 contentDTOs.clear()
                 contentUidList.clear()
                 for(snapshot in querySnapshot!!.documents){
-                    var item = snapshot.toObject(ContentDTO::class.java)
+                    val item = snapshot.toObject(ContentDTO::class.java)
                     contentDTOs.add(item!!)
                     contentUidList.add(snapshot.id)
                 }
@@ -47,7 +48,7 @@ class DetailViewFragment: Fragment(){
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-           var view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail,parent,false)
+           val view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail,parent,false)
             return CustomViewHolder(view)
         }
 
@@ -56,23 +57,24 @@ class DetailViewFragment: Fragment(){
             return contentDTOs.size
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            var viewHolder=(holder as  CustomViewHolder).itemView
+            val viewHolder=(holder as  CustomViewHolder).itemView
             //userid
-            viewHolder.detailviewitem_profile_textview.text= contentDTOs!![position].userId
+            viewHolder.detailviewitem_profile_textview.text= contentDTOs[position].userId
             //image
-            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewHolder.detailviewitem_imageview_content)
+            Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).into(viewHolder.detailviewitem_imageview_content)
             //explain of content
-            viewHolder.detailviewitem_explain_textview.text= contentDTOs!![position].explain
+            viewHolder.detailviewitem_explain_textview.text= contentDTOs[position].explain
             //likes
-            viewHolder.detailviewitem_favoritecounter_textview.text="Me gusta "+ contentDTOs!![position].favoriteCount
+            viewHolder.detailviewitem_favoritecounter_textview.text="Me gusta "+ contentDTOs[position].favoriteCount
 
             //Este codigo es cuando el boton es clickeado
             viewHolder.detailviewitem_favorite_imageview.setOnClickListener{
                 favoriteEvent(position)
             }
             //Este es para cuando la pagina este cargada
-            if(contentDTOs!![position].favorites.containsKey(uid)){
+            if(contentDTOs[position].favorites.containsKey(uid)){
                 //Este es el estado del Me gusta
                 viewHolder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite)
             }else{
@@ -80,21 +82,18 @@ class DetailViewFragment: Fragment(){
                 viewHolder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
             }
         }
-        fun favoriteEvent(position: Int){
-            var tsDoc= firestore?.collection("images")?.document(contentUidList[position])
+        private fun favoriteEvent(position: Int){
+            val tsDoc= firestore?.collection("images")?.document(contentUidList[position])
             firestore?.runTransaction{transaction ->
-
-                var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
-
+                val contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
                 if(contentDTO!!.favorites.containsKey(uid)){
                     //Cuando el boton es clickeado
-                    contentDTO?.favoriteCount =contentDTO?.favoriteCount -1
-                     contentDTO?.favorites.remove(uid)
-
+                    contentDTO.favoriteCount =contentDTO.favoriteCount -1
+                     contentDTO.favorites.remove(uid)
                 }else{
                     //Cuando el boton no es clickeado
-                    contentDTO?.favoriteCount=contentDTO?.favoriteCount +1
-                    contentDTO?.favorites[uid!!] =true
+                    contentDTO.favoriteCount=contentDTO.favoriteCount +1
+                    contentDTO.favorites[uid!!] =true
                 }
                 transaction.set(tsDoc,contentDTO)
             }
