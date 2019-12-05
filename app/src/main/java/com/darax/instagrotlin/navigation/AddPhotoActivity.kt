@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AddPhotoActivity : AppCompatActivity() {
-    var PICK_IMAGE_FROM_ALBUM=0
+    private var pick=0
     var storage: FirebaseStorage?= null
     var photoUri: Uri?=null
     var auth: FirebaseAuth?=null
@@ -32,9 +32,9 @@ class AddPhotoActivity : AppCompatActivity() {
         //Abrir el album
         var photoPickerIntent=Intent(Intent.ACTION_PICK)
         photoPickerIntent.type="image/*"
-        startActivityForResult(photoPickerIntent,PICK_IMAGE_FROM_ALBUM)
+        startActivityForResult(photoPickerIntent,pick)
 
-        //aniadir la imagen subida al evento
+        //aniadir datos de la imagen
         addphoto_btn_upload.setOnClickListener {
             contentUpload()
         }
@@ -42,7 +42,7 @@ class AddPhotoActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == PICK_IMAGE_FROM_ALBUM){
+        if(requestCode == pick){
             if(resultCode == Activity.RESULT_OK){
                 //Esta es la ruta de la imagen seleccionada
                 photoUri = data?.data
@@ -53,11 +53,11 @@ class AddPhotoActivity : AppCompatActivity() {
             }
         }
     }
-    fun contentUpload(){
+    private fun contentUpload(){
          //crear el nombre de archivo
-        var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        var imageFileName = "IMAGE_" + timestamp + "_.png"
-        var storageRef= storage?.reference?.child("images")?.child(imageFileName)
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "IMAGE_" + timestamp + "_.png"
+        val storageRef= storage?.reference?.child("images")?.child(imageFileName)
 
         storageRef?.putFile(photoUri!!)?.continueWithTask { task: com.google.android.gms.tasks.Task<UploadTask.TaskSnapshot> ->
             return@continueWithTask storageRef.downloadUrl
@@ -65,7 +65,6 @@ class AddPhotoActivity : AppCompatActivity() {
             var contentDTO= ContentDTO()
             //Insertar downloadURL de la imagen
             contentDTO.imageUrl=uri.toString()
-
             //Insertar uid de usuario
             contentDTO.uid = auth?.currentUser?.uid
             //insertar userId

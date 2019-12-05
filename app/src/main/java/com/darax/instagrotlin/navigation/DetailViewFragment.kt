@@ -10,12 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.darax.instagrotlin.R
 import com.darax.instagrotlin.navigation.model.ContentDTO
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 
 class DetailViewFragment: Fragment(){
     var firestore:FirebaseFirestore?=null
+    var uid : String? =null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -23,11 +25,9 @@ class DetailViewFragment: Fragment(){
     ): View? {
         var view=LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container,false)
         firestore= FirebaseFirestore.getInstance()
+        uid =FirebaseAuth.getInstance().currentUser?.uid
         view.detailviewfragmen_reciclerview.adapter= DetailViewReciclerView()
         view.detailviewfragmen_reciclerview.layoutManager =LinearLayoutManager(activity)
-
-
-
         return view
     }
     inner class DetailViewReciclerView: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -66,6 +66,39 @@ class DetailViewFragment: Fragment(){
             viewHolder.detailviewitem_explain_textview.text= contentDTOs!![position].explain
             //likes
             viewHolder.detailviewitem_favoritecounter_textview.text="Me gusta "+ contentDTOs!![position].favoriteCount
+
+            //Este codigo es cuando el boton es clickeado
+            viewHolder.detailviewitem_favorite_imageview.setOnClickListener{
+                favoriteEvent(position)
+            }
+            //Este es para cuando la pagina este cargada
+            if(contentDTOs!![position].favorites.containsKey(uid)){
+                //Este es el estado del Me gusta
+                viewHolder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite)
+            }else{
+                //este es el estado del No me gusta
+                viewHolder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
+            }
+        }
+        fun favoriteEvent(position: Int){
+            var tsDoc= firestore?.collection("images")?.document(contentUidList[position])
+            firestore?.runTransaction{transaction ->
+
+                var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
+
+                if(contentDTO!!.favorites.containsKey(uid)){
+                    //Cuando el boton es clickeado
+                    contentDTO?.favoriteCount =contentDTO?.favoriteCount -1
+                     contentDTO?.favorites.remove(uid)
+
+                }else{
+                    //Cuando el boton no es clickeado
+                    contentDTO?.favoriteCount=contentDTO?.favoriteCount +1
+                    contentDTO?.favorites[uid!!] =true
+                }
+                transaction.set(tsDoc,contentDTO)
+            }
+
         }
     }
 }

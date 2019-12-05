@@ -10,18 +10,19 @@ import androidx.core.content.ContextCompat
 import androidx.multidex.MultiDex
 import com.darax.instagrotlin.navigation.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSelectedListener {
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when(p0.itemId){
             R.id.action_home ->{
-                var detailViewFragment= DetailViewFragment()
+                val detailViewFragment= DetailViewFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.main_content,detailViewFragment).commit()
                 return true
             }
             R.id.action_search ->{
-                var gridFragment= GridFragment()
+                val gridFragment= GridFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.main_content,gridFragment).commit()
                 return true
             }
@@ -34,12 +35,17 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
                 return true
             }
             R.id.action_favorite_alarm ->{
-                var alarmFragment= AlarmFragment()
+                val alarmFragment= AlarmFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.main_content,alarmFragment).commit()
                 return true
             }
             R.id.action_account ->{
-                var userFragment= UserFragment()
+                val userFragment = UserFragment()
+                val bundle = Bundle()
+                val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+                bundle.putString("destinationUid",uid)
+                userFragment.arguments = bundle
                 supportFragmentManager.beginTransaction().replace(R.id.main_content,userFragment).commit()
                 return true
             }

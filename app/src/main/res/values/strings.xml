@@ -18,22 +18,23 @@
     <string name="signout_fail_null">Please enter your email and password</string>
 
     <!-- Bottom Navigation View -->
-    <string name="home">home</string>
+    <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="gallery">Gallery</string>
     <string name="favorite">Favorite</string>
     <string name="account">Account</string>
 
     <!-- Account -->
-    <string name="post">Post</string>
-    <string name="following">Following</string>
-    <string name="follower">Follower</string>
-    <string name="follow">Follow</string>
-    <string name="follow_cancel">Follow cancel</string>
-    <string name="profile">Profile</string>
+    <string name="post">Publicaciones</string>
+    <string name="following">Seguidos</string>
+    <string name="follower">Seguidores</string>
+    <string name="follow">Seguir</string>
+    <string name="follow_cancel">Dejar de Seguir</string>
+    <string name="profile">Perfil</string>
     <string name="count_0">0</string>
 
     <!-- Alarm -->
+    <string name="user_name">Usuario</string>
     <string name="alarm_favorite">Liked the press</string>
     <string name="alarm_comment">left a message</string>
     <string name="alarm_follow">has started to follow your account</string>
@@ -42,7 +43,7 @@
     <string name="send">Send</string>
 
     <!-- Add Photo -->
-    <string name="upload_image">Subir imagen</string>
+    <string name="upload_image">Subir Imagen</string>
     <string name="hint_image_content">Descripcion de la imagen</string>
     <string name="upload_success">Carga exitosa</string>
     <string name="upload_fail">Carga fallida</string>
