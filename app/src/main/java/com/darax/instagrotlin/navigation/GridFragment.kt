@@ -13,7 +13,7 @@ class GridFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view=LayoutInflater.from(activity).inflate(R.layout.fragment_grid,container,false)
+        val view=LayoutInflater.from(activity).inflate(R.layout.fragment_grid,container,false)
         return view
     }
 }

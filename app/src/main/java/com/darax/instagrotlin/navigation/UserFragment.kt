@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,7 +21,7 @@ class UserFragment: Fragment(){
     var fragmentView : View? = null
     var firestore : FirebaseFirestore? = null
     var uid : String? = null
-    var auth : FirebaseAuth? = null
+    private var auth : FirebaseAuth? = null
     var currentUserUid : String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,10 +38,10 @@ class UserFragment: Fragment(){
     }
 
     inner class UserFragmentRecyclerViewAdapter :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-        var contentDTO: ArrayList<ContentDTO> = arrayListOf()
+        private var contentDTO: ArrayList<ContentDTO> = arrayListOf()
         init {
-            firestore?.collection("images")?.whereEqualTo("uid",uid)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                //Aveces este query retorna null cuadno se cierra sesion
+            firestore?.collection("images")?.whereEqualTo("uid",uid)?.addSnapshotListener { querySnapshot, _ ->
+                //Aveces este query retorna null cuando se cierra sesion
                 if(querySnapshot == null ) return@addSnapshotListener
                 //Conseguir los datos
                 for(snapshot in querySnapshot.documents){
@@ -54,8 +52,8 @@ class UserFragment: Fragment(){
             }
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-           var with = resources.displayMetrics.widthPixels / 3
-            var imageview= ImageView(parent.context)
+           val with = resources.displayMetrics.widthPixels / 3
+            val imageview= ImageView(parent.context)
             imageview.layoutParams = LinearLayoutCompat.LayoutParams(with,with)
             return CustomViewHolder(imageview)
         }
@@ -66,7 +64,7 @@ class UserFragment: Fragment(){
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            var imageView = (holder as CustomViewHolder).imageview
+            val imageView = (holder as CustomViewHolder).imageview
             Glide.with(holder.itemView.context).load(contentDTO[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageView)
         }
 

@@ -17,10 +17,10 @@ import java.util.*
 
 class AddPhotoActivity : AppCompatActivity() {
     private var pick=0
-    var storage: FirebaseStorage?= null
-    var photoUri: Uri?=null
-    var auth: FirebaseAuth?=null
-    var firestore:FirebaseFirestore?=null
+    private var storage: FirebaseStorage?= null
+    private var photoUri: Uri?=null
+    private var auth: FirebaseAuth?=null
+    private var firestore:FirebaseFirestore?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_photo)
@@ -30,7 +30,7 @@ class AddPhotoActivity : AppCompatActivity() {
         auth=FirebaseAuth.getInstance()
         firestore= FirebaseFirestore.getInstance()
         //Abrir el album
-        var photoPickerIntent=Intent(Intent.ACTION_PICK)
+        val photoPickerIntent=Intent(Intent.ACTION_PICK)
         photoPickerIntent.type="image/*"
         startActivityForResult(photoPickerIntent,pick)
 
@@ -59,10 +59,10 @@ class AddPhotoActivity : AppCompatActivity() {
         val imageFileName = "IMAGE_" + timestamp + "_.png"
         val storageRef= storage?.reference?.child("images")?.child(imageFileName)
 
-        storageRef?.putFile(photoUri!!)?.continueWithTask { task: com.google.android.gms.tasks.Task<UploadTask.TaskSnapshot> ->
+        storageRef?.putFile(photoUri!!)?.continueWithTask { _: com.google.android.gms.tasks.Task<UploadTask.TaskSnapshot> ->
             return@continueWithTask storageRef.downloadUrl
         }?.addOnSuccessListener {uri->
-            var contentDTO= ContentDTO()
+            val contentDTO= ContentDTO()
             //Insertar downloadURL de la imagen
             contentDTO.imageUrl=uri.toString()
             //Insertar uid de usuario

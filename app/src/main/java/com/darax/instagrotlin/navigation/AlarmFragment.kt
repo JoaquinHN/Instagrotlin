@@ -13,7 +13,7 @@ class AlarmFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view=LayoutInflater.from(activity).inflate(R.layout.fragment_alarm,container,false)
+        val view=LayoutInflater.from(activity).inflate(R.layout.fragment_alarm,container,false)
         return view
     }
 }

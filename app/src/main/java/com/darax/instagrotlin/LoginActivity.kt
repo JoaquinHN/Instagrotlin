@@ -7,26 +7,20 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
-import android.content.pm.PackageManager
-import android.util.Base64
-import android.util.Log
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.google.firebase.auth.FacebookAuthCredential
-import com.google.firebase.auth.FacebookAuthProvider
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-import java.util.*
+import com.google.firebase.auth.FacebookAuthProvider as FacebookAuthProvider1
+import kotlin.collections.listOf as listOf1
 
 
 class LoginActivity : AppCompatActivity() {
     //Limpiar la clase de firebase para autenticacion
-    var auth: FirebaseAuth? = null
-    var callbackManager: CallbackManager? = null
+    private var auth: FirebaseAuth? = null
+    private var callbackManager: CallbackManager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -60,26 +54,23 @@ class LoginActivity : AppCompatActivity() {
     }*/
 
     //Funcion para inicar sesion o registrarse
-    fun entrarYregistrarse() {
+    private fun entrarYregistrarse() {
         auth?.createUserWithEmailAndPassword(
             email_edittext.text.toString(),
             password_edittext.text.toString()
         )?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                //Creacion de una cuenta de usuario
-                cambiarAlLayoutPrincipal(task.result?.user)
-
-            } else if (task.exception?.message.isNullOrEmpty()) {
-                //Mostrar mensaje de error
-                Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
-            } else {
-                //Acceder si se tiene la cuenta
-                registrarseconEmail()
+            when {
+                task.isSuccessful -> //Creacion de una cuenta de usuario
+                    cambiarAlLayoutPrincipal(task.result?.user)
+                task.exception?.message.isNullOrEmpty() -> //Mostrar mensaje de error
+                    Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
+                else -> //Acceder si se tiene la cuenta
+                    registrarseconEmail()
             }
         }
     }
 
-    fun registrarseconEmail() {
+    private fun registrarseconEmail() {
         auth?.signInWithEmailAndPassword(
             email_edittext.text.toString(),
             password_edittext.text.toString()
@@ -95,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun cambiarAlLayoutPrincipal(user: FirebaseUser?) {
+    private fun cambiarAlLayoutPrincipal(user: FirebaseUser?) {
         if (user != null) {
             startActivity(Intent(this, MainActivity::class.java))
         }
@@ -107,9 +98,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    fun facebookLogin() {
+    private fun facebookLogin() {
         LoginManager.getInstance()
-            .logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
+            .logInWithReadPermissions(this, listOf1("public_profile", "email"))
         LoginManager.getInstance()
             .registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
                 override fun onSuccess(result: LoginResult?) {
@@ -127,7 +118,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun handleFacebookAccesToken(token: AccessToken?) {
-        var credential = FacebookAuthProvider.getCredential(token?.token!!)
+        val credential = FacebookAuthProvider1.getCredential(token?.token!!)
         auth?.signInWithCredential(credential)
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
