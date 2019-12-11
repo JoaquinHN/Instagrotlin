@@ -12,7 +12,7 @@
     <string name="signin_facebook">Iniciar sesión con Facebook</string>
     <string name="signup_complete">Membership success</string>
     <string name="signin_complete">Login success</string>
-    <string name="signout">Signout</string>
+    <string name="signout">Cerrar Sesión</string>
     <string name="signout_success">Signout success</string>
     <string name="signout_fail">Signout fail</string>
     <string name="signout_fail_null">Please enter your email and password</string>

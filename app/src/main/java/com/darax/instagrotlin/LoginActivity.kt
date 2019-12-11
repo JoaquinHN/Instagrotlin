@@ -52,6 +52,19 @@ class LoginActivity : AppCompatActivity() {
             Log.e("TAG", "printHashKey()", e)
         }
     }*/
+    ////////////////////////////////
+    /*
+    public override fun onStart() {
+        super.onStart()
+        moveMainPage(auth?.currentUser)
+    }
+
+    fun moveMainPage(user:FirebaseUser?){
+        if(user != null){
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
+    }*/
 
     //Funcion para inicar sesion o registrarse
     private fun entrarYregistrarse() {

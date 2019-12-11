@@ -38,6 +38,8 @@ class DetailViewFragment: Fragment(){
             firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, _ ->
                 contentDTOs.clear()
                 contentUidList.clear()
+                //Aveces este query retorna null cuando se cierra sesion
+                if(querySnapshot == null ) return@addSnapshotListener 
                 for(snapshot in querySnapshot!!.documents){
                     val item = snapshot.toObject(ContentDTO::class.java)
                     contentDTOs.add(item!!)
@@ -46,17 +48,14 @@ class DetailViewFragment: Fragment(){
                 notifyDataSetChanged()
             }
         }
-
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail,parent,false)
             return CustomViewHolder(view)
         }
-
         inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view)
         override fun getItemCount(): Int {
             return contentDTOs.size
         }
-
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val viewHolder=(holder as  CustomViewHolder).itemView
@@ -80,6 +79,15 @@ class DetailViewFragment: Fragment(){
             }else{
                 //este es el estado del No me gusta
                 viewHolder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
+            }
+            //Este codigo sirve cuando la foto de perfil es clickeada
+            viewHolder.detailviewitem_profile_image.setOnClickListener {
+                val fragment = UserFragment()
+                val bundle = Bundle()
+                bundle.putString("destinationUid",contentDTOs[position].uid)
+                bundle.putString("userId",contentDTOs[position].userId)
+                fragment.arguments = bundle
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content,fragment)?.commit()
             }
         }
         private fun favoriteEvent(position: Int){

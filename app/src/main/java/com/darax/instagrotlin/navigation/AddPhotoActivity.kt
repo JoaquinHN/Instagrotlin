@@ -39,7 +39,6 @@ class AddPhotoActivity : AppCompatActivity() {
             contentUpload()
         }
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == pick){
@@ -77,26 +76,5 @@ class AddPhotoActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK)
             finish()
         }
-        //Metodo de callback
-        /*storageRef?.putFile(photoUri!!)?.addOnSuccessListener {
-            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                var contentDTO= ContentDTO()
-                //Insertar downloadURL de la imagen
-                contentDTO.imageUrl=uri.toString()
-
-                //Insertar uid de usuario
-                contentDTO.uid = auth?.currentUser?.uid
-                //insertar userId
-                contentDTO.userId = auth?.currentUser?.email
-                //Insertar explicacion del contenido
-                contentDTO.explain = addphoto_edit_explain.text.toString()
-                //Insertar tiempo donde se mando
-                contentDTO.timestamp = System.currentTimeMillis()
-                firestore?.collection("images")?.document()?.set(contentDTO)
-                setResult(Activity.RESULT_OK)
-                finish()
-            }
-        }*/
-
     }
 }
