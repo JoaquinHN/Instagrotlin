@@ -18,11 +18,11 @@
     <string name="signout_fail_null">Please enter your email and password</string>
 
     <!-- Bottom Navigation View -->
-    <string name="home">Home</string>
-    <string name="search">Search</string>
+    <string name="home">Casa</string>
+    <string name="search">Buscar</string>
     <string name="gallery">Gallery</string>
-    <string name="favorite">Favorite</string>
-    <string name="account">Account</string>
+    <string name="favorite">Favorito</string>
+    <string name="account">Cuenta</string>
 
     <!-- Account -->
     <string name="post">Publicaciones</string>

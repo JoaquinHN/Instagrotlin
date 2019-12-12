@@ -1,5 +1,6 @@
 package com.darax.instagrotlin
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -10,8 +11,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.multidex.MultiDex
 import com.darax.instagrotlin.navigation.*
+import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSelectedListener {
@@ -30,7 +35,6 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
             }
             R.id.action_add_photo ->{
                 //Si el usuario acepta los permisos entonces se puede abrir para revisar el almacenamiento
-
                 if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                     startActivity(Intent(this, AddPhotoActivity::class.java))
                 }
@@ -71,5 +75,21 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
 
         //Pantalla principal
         bottom_navigation.selectedItemId =R.id.action_home
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == UserFragment.PICK_PROFILE_FROM_ALBUM && resultCode == Activity.RESULT_OK){
+            val imageUri = data?.data
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            val storageRef =  FirebaseStorage.getInstance().reference.child("userProfileImages").child(uid!!)
+            storageRef.putFile(imageUri!!).continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
+                return@continueWithTask storageRef.downloadUrl
+            }.addOnSuccessListener { uri ->
+                val map = HashMap<String,Any>()
+                map ["image"] = uri.toString()
+                FirebaseFirestore.getInstance().collection("profileImages").document(uid).set(map)
+            }
+        }
     }
 }

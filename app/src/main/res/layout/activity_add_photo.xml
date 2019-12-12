@@ -21,8 +21,7 @@
         android:layout_below="@+id/my_toolbar"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="1dp"></LinearLayout>
-
+        android:layout_height="1dp"/>
     <ImageView
         android:id="@+id/addphoto_image"
         android:layout_margin="8dp"

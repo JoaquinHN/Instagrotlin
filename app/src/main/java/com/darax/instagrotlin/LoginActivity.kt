@@ -119,13 +119,10 @@ class LoginActivity : AppCompatActivity() {
                 override fun onSuccess(result: LoginResult?) {
                     handleFacebookAccesToken(result?.accessToken)
                 }
-
                 override fun onCancel() {
                 }
-
                 override fun onError(error: FacebookException?) {
                 }
-
             }
             )
     }

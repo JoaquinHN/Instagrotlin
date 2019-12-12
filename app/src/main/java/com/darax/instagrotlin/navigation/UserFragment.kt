@@ -27,6 +27,9 @@ class UserFragment: Fragment(){
     var uid : String? = null
     private var auth : FirebaseAuth? = null
     private var currentUserUid : String? = null
+    companion object{
+        var PICK_PROFILE_FROM_ALBUM = 10
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,7 +61,22 @@ class UserFragment: Fragment(){
         }
         fragmentView?.account_reyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_reyclerview?.layoutManager= GridLayoutManager(activity!!,3)
+        fragmentView?.account_iv_profile?.setOnClickListener {
+            val photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.type = "image/*"
+            activity?.startActivityForResult(photoPickerIntent,PICK_PROFILE_FROM_ALBUM)
+        }
+        getProfileImage()
         return fragmentView
+    }
+    private fun getProfileImage(){
+        firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener { documentSnapshot, _ ->
+            if(documentSnapshot == null) return@addSnapshotListener
+            if(documentSnapshot.data != null){
+                val url = documentSnapshot.data!!["image"]
+                Glide.with(activity!!).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile!!)
+            }
+        }
     }
     inner class UserFragmentRecyclerViewAdapter :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private var contentDTO: ArrayList<ContentDTO> = arrayListOf()

@@ -39,8 +39,8 @@ class DetailViewFragment: Fragment(){
                 contentDTOs.clear()
                 contentUidList.clear()
                 //Aveces este query retorna null cuando se cierra sesion
-                if(querySnapshot == null ) return@addSnapshotListener 
-                for(snapshot in querySnapshot!!.documents){
+                if(querySnapshot == null ) return@addSnapshotListener
+                for(snapshot in querySnapshot.documents){
                     val item = snapshot.toObject(ContentDTO::class.java)
                     contentDTOs.add(item!!)
                     contentUidList.add(snapshot.id)
@@ -90,6 +90,7 @@ class DetailViewFragment: Fragment(){
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content,fragment)?.commit()
             }
         }
+        //Agregar Me Gusta a las fotos
         private fun favoriteEvent(position: Int){
             val tsDoc= firestore?.collection("images")?.document(contentUidList[position])
             firestore?.runTransaction{transaction ->
